@@ -57,8 +57,18 @@ let create_teams = new fl.Chain(
 			logger.info(v.display_name+' on team '+idx);
 		});
 
-		env.idx = 0;
-		after();
+		var all_captains = true;
+		env.teams.forEach(function(v, k) {
+			if (!v.captain) {
+				all_captains = false;
+				return env.$throw(new Error("No captain for team "+k));
+			}
+		});
+
+		if (all_captains) {
+			env.idx = 0;
+			after();
+		}
 	},
 	new fl.LoopChain(
 		function(env, after) {
